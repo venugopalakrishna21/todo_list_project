@@ -1,5 +1,22 @@
-# To-Do List Project - Updated by Venu
-tasks = []
+# To-Do List Project - Updated by Venu``
+import os
+
+TASK_FILE = "tasks.txt"
+
+# Load tasks from file
+def load_tasks():
+    if os.path.exists(TASK_FILE):
+        with open(TASK_FILE, "r") as file:
+            return [task.strip() for task in file.readlines()]
+    return []
+
+# Save tasks to file
+def save_tasks():
+    with open(TASK_FILE, "w") as file:
+        for task in tasks:
+            file.write(task + "\n")
+
+tasks = load_tasks()  # Load tasks when program starts
 
 def show_menu():
     print("\n📌 To-Do List Menu:")
@@ -17,9 +34,13 @@ def view_tasks():
             print(f"{i}. {task}")
 
 def add_task():
-    task = input("Enter a new task: ")
-    tasks.append(task)
-    print(f"✅ Task '{task}' added successfully!")
+    task = input("Enter a new task: ").strip()
+    if task:
+        tasks.append(task)
+        save_tasks()
+        print(f"✅ Task '{task}' added successfully!")
+    else:
+        print("⚠️ Task cannot be empty!")
 
 def remove_task():
     view_tasks()
@@ -28,6 +49,7 @@ def remove_task():
     try:
         task_no = int(input("Enter task number to remove: "))
         removed_task = tasks.pop(task_no - 1)
+        save_tasks()
         print(f"❌ Task '{removed_task}' removed!")
     except (ValueError, IndexError):
         print("⚠️ Invalid number. Try again.")
@@ -51,4 +73,3 @@ def main():
 
 if __name__ == "__main__":
     main()
- 
